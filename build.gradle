@@ -1,0 +1,83 @@
+plugins {
+    id "groovy"
+    id "java"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "application"
+}
+
+version "0.1"
+group "org.bbop.apollo"
+
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
+}
+
+dependencies {
+    compileOnly(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    compileOnly("io.micronaut:micronaut-inject-groovy")
+
+//    developmentOnly("io.micronaut:micronaut-runtime-osx")
+    compile group: 'io.micronaut', name: 'micronaut-runtime-osx', version: '1.1.0.M2'
+    compile group: 'io.methvin', name: 'directory-watcher', version: '0.9.10'
+    compile group: 'net.java.dev.jna', name: 'jna', version: '5.5.0'
+
+
+
+//    developmentOnly("net.java.dev.jna:jna")
+//    developmentOnly("io.methvin:directory-watcher")
+
+    implementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation("io.micronaut:micronaut-inject")
+    implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-runtime-groovy")
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-http-server-netty")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.configuration:micronaut-hibernate-validator")
+    implementation("io.micronaut.configuration:micronaut-hibernate-gorm")
+    implementation("io.micronaut.configuration:micronaut-elasticsearch")
+    implementation("org.apache.logging.log4j:log4j-core:2.12.1")
+    runtimeOnly("org.apache.logging.log4j:log4j-api:2.12.1")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.12.1")
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.apache.tomcat:tomcat-jdbc")
+    testImplementation enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation("io.micronaut:micronaut-inject-groovy")
+    testImplementation("org.spockframework:spock-core") {
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+    testImplementation("io.micronaut.test:micronaut-test-spock")
+
+
+}
+
+test.classpath += configurations.developmentOnly
+
+mainClassName = "org.bbop.apollo.Application"
+
+java {
+    sourceCompatibility = JavaVersion.toVersion('11')
+    targetCompatibility = JavaVersion.toVersion('11')
+}
+
+tasks.withType(GroovyCompile) {
+    groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
+
+
+

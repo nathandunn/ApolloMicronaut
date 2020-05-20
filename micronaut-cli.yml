@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: org.bbop.apollo
+testFramework: spock
+sourceLanguage: groovy
+buildTool: gradle
+features: [annotation-api, app-name, docker, elasticsearch, gradle, groovy, groovy-application, h2, hibernate-gorm, hibernate-validator, http-client, log4j2, netty-server, readme, shade, spock, yaml]

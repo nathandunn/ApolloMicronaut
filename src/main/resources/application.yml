@@ -1,0 +1,22 @@
+micronaut:
+  io:
+    watch:
+      paths: src/main
+      restart: true
+  application:
+    name: apollo
+elasticsearch.httpHosts: '"http://localhost:9200,http://127.0.0.2:9200"'
+dataSource:
+  url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+  pooled: true
+  jmxExport: true
+  driverClassName: org.h2.Driver
+  username: sa
+  password: ''
+hibernate:
+  hbm2ddl:
+    auto: update
+  cache:
+    queries: false
+    use_second_level_cache: false
+    use_query_cache: false
